@@ -6,6 +6,8 @@ import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.exception.NoDataException
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class QuizRepository(val context: Context) {
     val storage = FirebaseStorage.getInstance("gs://jivetalk-quiz.appspot.com")
@@ -21,6 +23,6 @@ class QuizRepository(val context: Context) {
                     if(!emitter.isDisposed) emitter.onError(NoDataException())
                 }
             }
-        }
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 }
