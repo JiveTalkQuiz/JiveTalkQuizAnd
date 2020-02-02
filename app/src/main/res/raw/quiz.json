@@ -1,0 +1,46 @@
+{
+  "quiz": [
+    {
+      "word": "얼죽코",
+      "selection": [
+        {
+          "statement": "얼굴이 죽처럼 코와이네",
+          "correct": false
+        },
+        {
+          "statement": "얼굴은 죽이는데 코가 크네",
+          "correct": false
+        },
+        {
+          "statement": "얼어 죽어도 코트",
+          "correct": true
+        },
+        {
+          "statement": "얼어 죽어도 코끼리",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "word": "JMT",
+      "selection": [
+        {
+          "statement": "종민타",
+          "correct": false
+        },
+        {
+          "statement": "종묵틀",
+          "correct": false
+        },
+        {
+          "statement": "주막터",
+          "correct": true
+        },
+        {
+          "statement": "JunkMonk Transform",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "222917519061",
+    "firebase_url": "https://jivetalk-quiz.firebaseio.com",
+    "project_id": "jivetalk-quiz",
+    "storage_bucket": "jivetalk-quiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222917519061:android:99fb51791e9a4fa798245c",
+        "android_client_info": {
+          "package_name": "com.bwillocean.jiveQuizTalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222917519061-ge766eir7kdd311joao0ushfmf0jhj4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCObKzzDQgQuki7Xnl0yE_fqY8U6qETDCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222917519061-ge766eir7kdd311joao0ushfmf0jhj4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

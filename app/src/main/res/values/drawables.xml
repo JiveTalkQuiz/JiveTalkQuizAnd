@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="quiz_main_background">@color/quiz_main_background</drawable>
+
+</resources>
