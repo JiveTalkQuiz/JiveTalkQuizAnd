@@ -1,4 +1,4 @@
-package com.bwillocean.jiveQuizTalk.main.view
+package com.bwillocean.jiveQuizTalk.quizList.view
 
 import android.view.LayoutInflater
 import android.view.View

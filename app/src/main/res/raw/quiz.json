@@ -1,6 +1,7 @@
 {
   "quiz": [
     {
+      "title": "제1장",
       "word": "얼죽코",
       "selection": [
         {
@@ -22,6 +23,7 @@
       ]
     },
     {
+      "title": "제2장",
       "word": "JMT",
       "selection": [
         {

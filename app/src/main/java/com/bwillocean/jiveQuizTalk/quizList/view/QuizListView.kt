@@ -1,5 +1,7 @@
-package com.bwillocean.jiveQuizTalk.main.view
+package com.bwillocean.jiveQuizTalk.quizList.view
 
+import android.content.Intent
+import android.os.Build.VERSION_CODES.P
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.widget.Toast
@@ -10,16 +12,15 @@ import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.data.model.QuizSelection
-import com.bwillocean.jiveQuizTalk.main.MainViewModel
-import com.bwillocean.jiveQuizTalk.main.QuizEvent
-import com.bwillocean.jiveQuizTalk.util.DpUtils
-import com.bwillocean.jiveQuizTalk.view.SpaceItemDecoration
+import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
+import com.bwillocean.jiveQuizTalk.quizList.MainViewModel
+import com.bwillocean.jiveQuizTalk.quizList.QuizEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.quiz_list_activity.*
 import kotlin.math.roundToInt
 
-class MainView(private val activity: BaseActivity, val viewModel: MainViewModel): BaseView(activity),
+class QuizListView(private val activity: BaseActivity, val viewModel: MainViewModel): BaseView(activity),
     RecyclerView.OnItemTouchListener {
     val spanCount = calculateSpanCount(75)
     val quizAdapter = QuizAdapter()
@@ -27,7 +28,7 @@ class MainView(private val activity: BaseActivity, val viewModel: MainViewModel)
 
     override fun bindViewModel(disposable: CompositeDisposable) {
         disposable.add(viewModel.dataStream
-            .onErrorReturn { Quiz(listOf(QuizItem("", listOf(QuizSelection("", false))))) }
+            .onErrorReturn { Quiz(listOf(QuizItem("", "", listOf(QuizSelection("", false))))) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 quizAdapter.setQuiz(it)
@@ -80,7 +81,12 @@ class MainView(private val activity: BaseActivity, val viewModel: MainViewModel)
 
             if(position != RecyclerView.NO_POSITION) {
                 quizAdapter.getItem(position)?.let { quizItem ->
-                    Toast.makeText(activity, "quiz ${quizItem.word}", Toast.LENGTH_SHORT).show()
+                    Intent(activity, QuizActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
+                    }.run {
+                        activity.startActivity(this)
+                    }
                 }
             }
         }

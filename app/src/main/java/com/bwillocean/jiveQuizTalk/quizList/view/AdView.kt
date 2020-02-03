@@ -1,14 +1,14 @@
-package com.bwillocean.jiveQuizTalk.main.view
+package com.bwillocean.jiveQuizTalk.quizList.view
 
 import android.util.Log
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
-import com.bwillocean.jiveQuizTalk.main.MainActivity
-import com.bwillocean.jiveQuizTalk.main.MainViewModel
+import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
+import com.bwillocean.jiveQuizTalk.quizList.MainViewModel
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.quiz_list_activity.*
 
 class AdView(val activity: BaseActivity, val viewMode: MainViewModel): BaseView(activity) {
     override fun bindViewModel(disposable: CompositeDisposable) {}
@@ -23,7 +23,7 @@ class AdView(val activity: BaseActivity, val viewMode: MainViewModel): BaseView(
                 adListener = object: AdListener() {
                     override fun onAdFailedToLoad(code: Int) {
                         super.onAdFailedToLoad(code)
-                        Log.e(MainActivity.TAG, "ad load error $code")
+                        Log.e(QuizListActivity.TAG, "ad load error $code")
                     }
                 }
                 loadAd(adRequest)

@@ -1,10 +1,9 @@
-package com.bwillocean.jiveQuizTalk.main
+package com.bwillocean.jiveQuizTalk.quizList
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.bwillocean.jiveQuizTalk.data.QuizRepository
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
-import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
 enum class QuizEvent {

@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="quiz_main_background">#c7dfd5</color>
+    <color name="white">#ffffff</color>
+    <color name="greenPointColor">#368084</color>
+    <color name="dialog_fail_text_color">#8f8f8f</color>
 </resources>

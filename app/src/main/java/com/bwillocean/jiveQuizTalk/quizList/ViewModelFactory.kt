@@ -1,4 +1,4 @@
-package com.bwillocean.jiveQuizTalk.main
+package com.bwillocean.jiveQuizTalk.quizList
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

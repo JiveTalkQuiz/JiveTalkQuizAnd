@@ -8,4 +8,4 @@
     android:textSize="15dp"
     android:gravity="center"
     android:background="@drawable/stage"
-    android:textColor="#368084"/>
+    android:textColor="@color/greenPointColor"/>
