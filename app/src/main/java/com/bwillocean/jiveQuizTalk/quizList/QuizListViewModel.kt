@@ -1,10 +1,14 @@
 package com.bwillocean.jiveQuizTalk.quizList
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.data.QuizRepository
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
+import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
 import io.reactivex.subjects.BehaviorSubject
 
 enum class QuizEvent {
@@ -31,16 +35,29 @@ class MainViewModel(val context: Context) : ViewModel() {
     }
 
     fun nextQuiz(): QuizItem? {
-        return quiz?.quizList?.indexOfFirst {
+        val item = quiz?.quizList?.indexOfFirst {
             it == lastSelectedQuiz
         }?.let {
             if ((it+1) < (quiz?.quizList?.size ?: 0)) {
                 quiz?.quizList?.get(it + 1)
             } else null
         }
+
+        return return if (lastSelectedQuiz == item) {
+            null
+        } else {
+            item
+        }
     }
 
-    fun setSelectedQuiz(quizItem: QuizItem) {
+    fun startQuizDetail(activity: Activity, quizItem: QuizItem) {
         lastSelectedQuiz = quizItem
+
+        Intent(activity, QuizActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
+        }.run {
+            activity.startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
+        }
     }
 }

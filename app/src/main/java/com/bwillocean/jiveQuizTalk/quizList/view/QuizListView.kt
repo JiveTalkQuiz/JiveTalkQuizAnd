@@ -82,13 +82,7 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
 
             if(position != RecyclerView.NO_POSITION) {
                 quizAdapter.getItem(position)?.let { quizItem ->
-                    viewModel.setSelectedQuiz(quizItem)
-                    Intent(activity, QuizActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
-                    }.run {
-                        activity.startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
-                    }
+                    viewModel.startQuizDetail(activity, quizItem)
                 }
             }
         }

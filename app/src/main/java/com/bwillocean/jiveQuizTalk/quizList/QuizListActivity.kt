@@ -40,12 +40,7 @@ class QuizListActivity : BaseActivity() {
 
         if (requestCode == Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL && resultCode == Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ) {
             mainViewModel.nextQuiz()?.let { quizItem ->
-                Intent(this, QuizActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
-                }.run {
-                    startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
-                }
+                mainViewModel.startQuizDetail(this, quizItem)
             } ?: run {
                 Toast.makeText(this, "마지막 문제", Toast.LENGTH_SHORT).show()
             }
