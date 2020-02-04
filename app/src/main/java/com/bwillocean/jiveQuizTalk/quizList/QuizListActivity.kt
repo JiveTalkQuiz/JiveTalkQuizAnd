@@ -1,9 +1,13 @@
 package com.bwillocean.jiveQuizTalk.quizList
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
+import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
 
@@ -29,5 +33,22 @@ class QuizListActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL && resultCode == Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ) {
+            mainViewModel.nextQuiz()?.let { quizItem ->
+                Intent(this, QuizActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
+                }.run {
+                    startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
+                }
+            } ?: run {
+                Toast.makeText(this, "마지막 문제", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

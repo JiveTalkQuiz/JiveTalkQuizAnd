@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
@@ -81,11 +82,12 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
 
             if(position != RecyclerView.NO_POSITION) {
                 quizAdapter.getItem(position)?.let { quizItem ->
+                    viewModel.setSelectedQuiz(quizItem)
                     Intent(activity, QuizActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
                     }.run {
-                        activity.startActivity(this)
+                        activity.startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
                     }
                 }
             }
