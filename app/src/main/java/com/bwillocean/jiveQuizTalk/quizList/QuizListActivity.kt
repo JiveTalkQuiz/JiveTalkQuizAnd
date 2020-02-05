@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
+import com.bwillocean.jiveQuizTalk.data.ResolveRepository
+import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
+import com.bwillocean.jiveQuizTalk.quizList.view.PointView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
 
 class QuizListActivity : BaseActivity() {
@@ -19,6 +22,7 @@ class QuizListActivity : BaseActivity() {
     lateinit var mainViewModel: MainViewModel
     lateinit var adView: AdView
     lateinit var mainView: QuizListView
+    lateinit var pointView: PointView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,7 @@ class QuizListActivity : BaseActivity() {
 
         adView = AdView(this, mainViewModel)
         mainView = QuizListView(this, mainViewModel)
+        pointView = PointView(this, mainViewModel)
 
         mainViewModel.loadData()
     }
@@ -39,10 +44,15 @@ class QuizListActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL && resultCode == Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ) {
-            mainViewModel.nextQuiz()?.let { quizItem ->
+            var quizItem: QuizItem? = null
+            do {
+                quizItem = mainViewModel.nextQuiz()
+            } while (quizItem != null && ResolveRepository.instance.isResolved(quizItem.title))
+
+            quizItem?.let {
                 mainViewModel.startQuizDetail(this, quizItem)
             } ?: run {
-                Toast.makeText(this, "마지막 문제", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "문제를 모두 풀었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

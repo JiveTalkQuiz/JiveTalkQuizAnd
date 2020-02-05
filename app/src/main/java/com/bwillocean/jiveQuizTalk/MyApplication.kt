@@ -15,6 +15,10 @@ class MyApplication: MultiDexApplication() {
         fun async(callback: Runnable) {
             handler.post(callback)
         }
+
+        fun async(delay: Long, callback: Runnable) {
+            handler.postDelayed(callback, delay)
+        }
     }
 
     override fun onCreate() {

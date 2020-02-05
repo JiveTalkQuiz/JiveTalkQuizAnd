@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bwillocean.jiveQuizTalk.R
+import com.bwillocean.jiveQuizTalk.data.ResolveRepository
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import kotlinx.android.synthetic.main.quiz_item.view.*
@@ -34,6 +35,13 @@ class QuizAdapter: RecyclerView.Adapter<QuizViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
-        holder.text.text = position.toString()
+
+        if (ResolveRepository.instance.isResolved(list[position].title)) {
+            holder.text.setBackgroundResource(R.drawable.stage_check)
+            holder.text.text = ""
+        } else {
+            holder.text.setBackgroundResource(R.drawable.stage)
+            holder.text.text = position.toString()
+        }
     }
 }

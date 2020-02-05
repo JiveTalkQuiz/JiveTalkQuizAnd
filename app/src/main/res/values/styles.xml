@@ -22,4 +22,14 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="LoadingDialog" parent="@style/Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+    <style name="MailCircularProgressStyle">
+        <item name = "cpv_animAutostart">true</item>
+        <item name = "cpv_color">@color/loading_progress_accent_color</item>
+        <item name = "cpv_thickness">1.5dp</item>
+        <item name = "cpv_animDuration">2500</item>
+    </style>
 </resources>

@@ -12,9 +12,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
+import com.bwillocean.jiveQuizTalk.data.ResolveRepository
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.dialog.ResponseDialogUtil
-import com.bwillocean.jiveQuizTalk.point.PointManager
+import com.bwillocean.jiveQuizTalk.data.PointManager
 import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -34,6 +35,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var quizItem: QuizItem
     lateinit var InterstitialAd: InterstitialAd
+    var quizPassed: Boolean = false
 
     private var quizChecked = false
     private var disposable: Disposable? = null
@@ -47,11 +49,13 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             QuizUIViews(statement_1, statement_1_text, statement_1_check),
             QuizUIViews(statement_2, statement_2_text, statement_2_check),
             QuizUIViews(statement_3, statement_3_text, statement_3_check),
-            QuizUIViews(statement_4, statement_4_text, statement_4_check)
+            QuizUIViews(statement_4, statement_4_text, statement_4_check),
+            QuizUIViews(statement_5, statement_5_text, statement_5_check)
         )
 
         (intent.extras?.getSerializable(EXTRAS_KEY) as? QuizItem?)?.let {
             quizItem = it
+            quizPassed = ResolveRepository.instance.isResolved(quizItem.title)
         } ?: run {
             finish()
         }
@@ -115,15 +119,30 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         quiz_main_title.text = quizItem.title
         quiz_main_text.text = quizItem.word.trim()
 
-        quizItem.selection.take(4).forEachIndexed { index, quizSelection ->
-            quizUIViews[index].answerText.text = quizSelection.statement
-            quizUIViews[index].layer.tag = quizSelection.isCorrect
-            quizUIViews[index].layer.setOnClickListener(this)
+        quizItem.selection.take(5).forEachIndexed { index, quizSelection ->
+            quizUIViews[index].layer.visibility = View.VISIBLE
+
+            if (quizPassed && quizSelection.isCorrect) {
+                quizUIViews[index].answerText.text = quizSelection.statement
+                quizUIViews[index].answerText.setTextColor(Color.WHITE)
+                quizUIViews[index].layer.setBackgroundResource(R.drawable.green_rounded_bg)
+                quizUIViews[index].icon.visibility = View.VISIBLE
+                quizUIViews[index].layer.tag = true
+            } else {
+                quizUIViews[index].answerText.text = quizSelection.statement
+                quizUIViews[index].layer.tag = quizSelection.isCorrect
+                quizUIViews[index].layer.setOnClickListener(this)
+            }
         }
     }
 
     override fun onClick(view: View?) {
         if (quizChecked) {
+            return
+        }
+
+        if (quizPassed) {
+            Toast.makeText(this, "이미 정답을 맞춘 문제 입니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -178,13 +197,21 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     private fun checkCorrectness(view: View) {
         if (view.tag as? Boolean == true) {
             ResponseDialogUtil.responseDialog(this, true, DialogInterface.OnCancelListener {
+                ResolveRepository.instance.saveResolved(quizItem.title)
                 setResult(Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ)
                 finish()
             })
         } else {
             ResponseDialogUtil.responseDialog(this, false, DialogInterface.OnCancelListener {
-                PointManager.point -= PointManager.FAIL_POINT
+                finish()
             })
         }
     }
+
+    /**
+     * TODO 포인트 클릭 애니메이션 (진동)
+     * 포인트 전면 광고 본 후에 다시 볼수 있게 ? 아니라면 문구내용 에러 처리 ? 제한 5분 제한 ?
+     * 포인트 0일때 처리 ? (어짜피 4번 누르면 답 볼 수 있는거 아님 ? )
+     *
+     */
 }

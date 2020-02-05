@@ -8,4 +8,6 @@
     <color name="white">#ffffff</color>
     <color name="greenPointColor">#368084</color>
     <color name="dialog_fail_text_color">#8f8f8f</color>
+    <color name="transparent">#ffffffff</color>
+    <color name="loading_progress_accent_color">#ff3283e8</color>
 </resources>

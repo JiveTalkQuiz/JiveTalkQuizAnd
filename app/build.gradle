@@ -12,19 +12,39 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "0.1"
+        versionName "0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+            storeFile file('singed_key.jks')
+            keyAlias "bwillocean"
+            storePassword "no1quiz!!"
+            keyPassword "no1quiz!!"
+        }
+    }
+
     buildTypes {
         debug {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix '-debug'
+            signingConfig signingConfigs.release
         }
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            resValue "string", "perfermance_flag", "false"
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 
@@ -44,7 +64,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
-    implementation 'com.sackcentury:shinebutton:1.0.0'
+    implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

@@ -19,8 +19,10 @@ object ResponseDialogUtil {
         dialog.setOnCancelListener(cancelListener)
         dialog.show()
 
-        MyApplication.async(Runnable {
-            button.performClick()
+        MyApplication.async(2*1000, Runnable {
+            if(dialog.isShowing && dialog.context != null && !activity.isDestroyed && !activity.isFinishing) {
+                dialog.dismiss()
+            }
         })
     }
 }

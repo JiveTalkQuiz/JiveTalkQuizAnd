@@ -80,7 +80,7 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
         rv.findChildViewUnder(e.x, e.y)?.let { child ->
             val position = rv.getChildAdapterPosition(child)
 
-            if(position != RecyclerView.NO_POSITION) {
+            if(position != RecyclerView.NO_POSITION && e.actionMasked == MotionEvent.ACTION_UP) {
                 quizAdapter.getItem(position)?.let { quizItem ->
                     viewModel.startQuizDetail(activity, quizItem)
                 }

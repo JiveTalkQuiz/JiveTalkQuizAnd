@@ -151,6 +151,7 @@
         android:layout_width="320dp"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
+        android:visibility="gone"
         android:background="@drawable/white_rounded_bg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -182,6 +183,7 @@
         android:layout_width="320dp"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
+        android:visibility="gone"
         android:background="@drawable/white_rounded_bg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -199,6 +201,37 @@
 
         <ImageView
             android:id="@+id/statement_4_check"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="17.5dp"
+            android:src="@drawable/ico_check"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/statement_5"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/white_rounded_bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statement_4">
+
+        <TextView
+            android:id="@+id/statement_5_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/bm_hanna_pro"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/greenPointColor"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/statement_5_check"
             android:layout_width="17dp"
             android:layout_height="17dp"
             android:layout_gravity="right"
