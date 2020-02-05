@@ -63,7 +63,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         showAd()
         showQuiz()
         showPoint()
-        setupFullAd()
 
         prev_icon.setOnClickListener {
             onBackPressed()
@@ -77,22 +76,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         disposable?.dispose()
-    }
-
-    fun setupFullAd() {
-        InterstitialAd = InterstitialAd(this@QuizActivity)
-        InterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
-        InterstitialAd.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(p0: Int) {
-                super.onAdFailedToLoad(p0)
-                Log.e("TEST", "onAdFailedToLoad $p0")
-            }
-
-            override fun onAdClosed() { // Load the next interstitial.
-                PointManager.point += PointManager.AD_POINT
-            }
-        }
-        InterstitialAd.loadAd(AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build())
     }
 
     fun showPoint() {
@@ -149,10 +132,8 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         when (view?.id) {
             R.id.point_icon, R.id.point_text -> {
                 if (PointManager.point == 0) {
-                    if(InterstitialAd.isLoaded) {
-                        InterstitialAd.show()
-                    } else {
-                        Log.w("TEST", "ad load fail")
+                    PointManager.createFullAd(this@QuizActivity) {
+                        it.show()
                     }
                 } else {
                     PointManager.point -= PointManager.HINT_POINT

@@ -37,7 +37,7 @@ object PointManager {
     val pointStream = PublishSubject.create<Int>()
 
     fun createFullAd(activity: Activity, callback: (InterstitialAd) -> Unit){
-        LoadingDialog.showLoading(activity)
+        LoadingDialog.showLoading(activity, 3*1000)
 
         val interstitialAd = InterstitialAd(activity)
         interstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
@@ -45,6 +45,7 @@ object PointManager {
             override fun onAdFailedToLoad(p0: Int) {
                 super.onAdFailedToLoad(p0)
                 Log.e("TEST", "onAdFailedToLoad $p0")
+                LoadingDialog.hideLoading()
             }
 
             override fun onAdClosed() { // Load the next interstitial.
