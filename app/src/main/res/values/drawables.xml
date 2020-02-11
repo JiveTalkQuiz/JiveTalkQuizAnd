@@ -2,5 +2,5 @@
 <resources>
     <drawable name="quiz_main_background">@color/quiz_main_background</drawable>
     <drawable name="white">@color/white</drawable>
-
+    <drawable name="activity_background">@color/activity_background</drawable>
 </resources>

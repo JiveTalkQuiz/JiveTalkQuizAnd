@@ -1,58 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/quiz_main_background"
-    tools:context=".quizList.QuizListActivity">
+    android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/point_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginRight="3dp"
-        android:src="@drawable/ico_point"
-        app:layout_constraintRight_toLeftOf="@+id/point_text"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/point_text"
-        android:layout_width="37.5dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="18dp"
-        android:fontFamily="@font/bm_hanna_pro"
-        android:gravity="center_vertical|left"
-        android:text="15"
-        android:textColor="@color/greenPointColor"
-        android:textSize="12dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/grid"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:foregroundGravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/adView"
-        android:scrollbars="none" />
+        android:layout_height="match_parent"
+        android:background="@drawable/quiz_main_background"
+        tools:context=".quizList.QuizListActivity">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="266.5dp"
+            android:background="@drawable/quiz_main_background">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/missionDetailCollapsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/splashLayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="parallax">
+
+                    <TextView
+                        android:id="@+id/splash_label_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="120dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="27dp"
+                        android:fontFamily="@font/bm_hanna_pro"
+                        android:maxLines="2"
+                        android:text="신조어\n테스트"
+                        android:textColor="@color/greenPointColor"
+                        android:textSize="60dp"
+
+                        app:layout_constraintBottom_toTopOf="@+id/level_img"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/level_img"
+                        android:layout_width="275dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="72.5dp"
+                        android:scaleType="center"
+                        android:src="@drawable/bar"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/splash_label_1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    app:layout_collapseMode="pin"
+                    app:title="스테이지" />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="30dp"
+            android:foregroundGravity="center_horizontal"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-4146232804662233/4616337941"
-        app:layout_constraintTop_toBottomOf="@id/grid"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:adUnitId="ca-app-pub-4146232804662233/4616337941" />
+</LinearLayout>

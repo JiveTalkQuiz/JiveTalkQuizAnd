@@ -158,6 +158,10 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                 checkCorrectness(view)
                 submit(3)
             }
+            R.id.statement_5 -> {
+                checkCorrectness(view)
+                submit(4)
+            }
         }
     }
 

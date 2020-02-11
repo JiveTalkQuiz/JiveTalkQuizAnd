@@ -33,13 +33,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix '-debug'
             signingConfig signingConfigs.release
+            resValue "string", "testonly", "false"
         }
         release {
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "perfermance_flag", "false"
+            resValue "string", "testonly", "false"
         }
     }
     compileOptions {
@@ -53,7 +54,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.firebase:firebase-ads:18.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -65,6 +66,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
 
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

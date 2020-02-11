@@ -17,15 +17,15 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
     override fun onCreate() {
         super.onCreate()
 
-        activity.point_text.text = PointManager.point.toString()
+        //activity.point_text.text = PointManager.point.toString()
 
-        activity.point_text.setOnClickListener(this)
-        activity.point_icon.setOnClickListener(this)
+        //activity.point_text.setOnClickListener(this)
+        //activity.point_icon.setOnClickListener(this)
     }
 
     override fun bindViewModel(disposable: CompositeDisposable) {
         disposable.add(PointManager.pointStream.observeOn(AndroidSchedulers.mainThread()).subscribe({
-            activity.point_text.text = PointManager.point.toString()
+           // activity.point_text.text = PointManager.point.toString()
         },{}))
     }
 

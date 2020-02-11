@@ -11,19 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:testOnly="@string/testonly"
         tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4146232804662233~8970322408"/>
 
-        <activity android:name="com.bwillocean.jiveQuizTalk.quizList.QuizListActivity">
+        <activity android:name="com.bwillocean.jiveQuizTalk.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.bwillocean.jiveQuizTalk.quiz.QuizActivity">
+        </activity>
+        <activity android:name="com.bwillocean.jiveQuizTalk.quizList.QuizListActivity">
         </activity>
     </application>
 
