@@ -6,6 +6,7 @@ import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.PointManager
 import com.bwillocean.jiveQuizTalk.data.ScoreManager
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.quizList.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,6 +22,7 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
 
         activity.point_text.setOnClickListener(this)
         activity.point_icon.setOnClickListener(this)
+        activity.reset.setOnClickListener(this)
 
         activity.point_text.text = PointManager.point.toString()
         updateScoreGrade()
@@ -53,6 +55,17 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
                     PointManager.createFullAd(activity) {
                         it.show()
                     }
+                }
+            }
+            R.id.reset -> {
+                SolveManager.reset()
+
+                PointManager.point = 0
+
+                if (ScoreManager.score > 100) {
+                    ScoreManager.score = 0
+                } else {
+                    ScoreManager.score += 20
                 }
             }
         }

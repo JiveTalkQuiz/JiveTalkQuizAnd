@@ -18,4 +18,12 @@ object SolveManager {
             preference.edit().putBoolean(KEY_NAME_RESOLVE_PREFIX+quizId, true).apply()
         }
     }
+
+    fun reset() {
+        val edit = preference.edit()
+        preference.all.keys.forEach {
+            edit.remove(it)
+        }
+        edit.apply()
+    }
 }
