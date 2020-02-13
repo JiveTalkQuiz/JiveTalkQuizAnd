@@ -5,6 +5,6 @@ import java.io.Serializable
 
 data class Quiz(@Json(name = "quiz") val quizList: List<QuizItem>)
 
-data class QuizItem(@Json(name = "title") val title: String, @Json(name = "word") val word: String, @Json(name = "selection") val selection: List<QuizSelection>): Serializable
+data class QuizItem(@Json(name = "id") val id: Int, @Json(name = "word") val word: String, @Json(name = "selection") val selection: List<QuizSelection>): Serializable
 
 data class QuizSelection(@Json(name = "statement") val statement: String, @Json(name = "correct") val isCorrect: Boolean): Serializable

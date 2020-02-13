@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/bm_hanna_pro"
+        android:fontFamily="@font/hana_pro"
         android:gravity="center"
         android:text="땡!"
         android:textColor="@color/dialog_fail_text_color"

@@ -3,26 +3,32 @@
     android:id="@+id/splashLayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/quiz_main_background">
+    android:background="@drawable/quiz_main_background"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="189dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="48dp"
-        android:padding="0dp"
-        android:fontFamily="@font/bm_hanna_pro"
+        android:fontFamily="@font/hana_pro"
+        android:gravity="start|top"
+        android:singleLine="false"
+        android:includeFontPadding="false"
+        android:maxLines="3"
         android:text="나의\n아재력\n테스트"
         android:textColor="#84aeb0"
-        android:textSize="63dp"/>
+        android:textSize="63dp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="189dp"
         android:layout_marginLeft="40dp"
-        android:padding="0dp"
-        android:fontFamily="@font/bm_hanna_pro"
+        android:fontFamily="@font/hana_pro"
+        android:gravity="start|top"
+        android:singleLine="false"
+        android:includeFontPadding="false"
+        android:maxLines="3"
         android:text="내가 아는\n신조어는\n몇 개?"
         android:textColor="@color/greenPointColor"
         android:textSize="63dp" />

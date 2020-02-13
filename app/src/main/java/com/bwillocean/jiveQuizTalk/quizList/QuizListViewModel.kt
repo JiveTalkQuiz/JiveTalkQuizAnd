@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.data.PointManager
 import com.bwillocean.jiveQuizTalk.data.QuizRepository
-import com.bwillocean.jiveQuizTalk.data.ResolveRepository
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
@@ -56,7 +56,7 @@ class MainViewModel(val context: Context) : ViewModel() {
     fun startQuizDetail(activity: Activity, quizItem: QuizItem) {
         lastSelectedQuiz = quizItem
 
-        val passed = ResolveRepository.instance.isResolved(quizItem.title)
+        val passed = SolveManager.checkQuizResult(quizItem.id)
         if(!passed) {
             if (PointManager.point < PointManager.USE_POINT) {
                 Toast.makeText(activity, "포인트를 충전해 주세요", Toast.LENGTH_SHORT).show()

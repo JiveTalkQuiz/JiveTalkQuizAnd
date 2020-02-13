@@ -12,10 +12,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
-import com.bwillocean.jiveQuizTalk.data.ResolveRepository
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.dialog.ResponseDialogUtil
 import com.bwillocean.jiveQuizTalk.data.PointManager
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -55,7 +55,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
         (intent.extras?.getSerializable(EXTRAS_KEY) as? QuizItem?)?.let {
             quizItem = it
-            quizPassed = ResolveRepository.instance.isResolved(quizItem.title)
+            quizPassed = SolveManager.checkQuizResult(quizItem.id)
         } ?: run {
             finish()
         }
@@ -99,7 +99,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun showQuiz() {
-        quiz_main_title.text = quizItem.title
+        quiz_main_title.text = "제${quizItem.id}장"
         quiz_main_text.text = quizItem.word.trim()
 
         quizItem.selection.take(5).forEachIndexed { index, quizSelection ->
@@ -182,7 +182,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     private fun checkCorrectness(view: View) {
         if (view.tag as? Boolean == true) {
             ResponseDialogUtil.responseDialog(this, true, DialogInterface.OnCancelListener {
-                ResolveRepository.instance.saveResolved(quizItem.title)
+                SolveManager.solveQuiz(quizItem.id)
                 setResult(Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ)
                 finish()
             })

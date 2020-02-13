@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
-import com.bwillocean.jiveQuizTalk.data.ResolveRepository
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
-import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
 import com.bwillocean.jiveQuizTalk.quizList.view.PointView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
@@ -27,6 +26,7 @@ class QuizListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_list_activity)
+
         mainViewModel = ViewModelProvider(this, ViewModelFactory(this))[MainViewModel::class.java]
 
         adView = AdView(this, mainViewModel)
@@ -47,7 +47,7 @@ class QuizListActivity : BaseActivity() {
             var quizItem: QuizItem? = null
             do {
                 quizItem = mainViewModel.nextQuiz()
-            } while (quizItem != null && ResolveRepository.instance.isResolved(quizItem.title))
+            } while (quizItem != null && SolveManager.checkQuizResult(quizItem.id))
 
             quizItem?.let {
                 mainViewModel.startQuizDetail(this, quizItem)

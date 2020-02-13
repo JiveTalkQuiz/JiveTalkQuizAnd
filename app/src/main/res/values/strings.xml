@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">quiz</string>
+    <string name="list_main_title">신조어테스트</string>
 </resources>
