@@ -1,6 +1,7 @@
 package com.bwillocean.jiveQuizTalk.quizList.view
 
 import android.view.View
+import android.widget.Toast
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
@@ -59,14 +60,10 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
             }
             R.id.reset -> {
                 SolveManager.reset()
-
+                ScoreManager.score = 0
                 PointManager.point = 0
 
-                if (ScoreManager.score > 100) {
-                    ScoreManager.score = 0
-                } else {
-                    ScoreManager.score += 20
-                }
+                Toast.makeText(activity, "초기화됨", Toast.LENGTH_SHORT).show()
             }
         }
     }

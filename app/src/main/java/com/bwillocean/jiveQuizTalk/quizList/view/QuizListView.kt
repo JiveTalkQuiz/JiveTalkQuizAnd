@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
+import com.bwillocean.jiveQuizTalk.data.ScoreManager
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.data.model.QuizSelection
@@ -43,6 +44,11 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
                         LoadingDialog.hideLoading()
                     }
                 }
+            }, {}))
+
+        disposable.add(ScoreManager.scoreStream.observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                quizAdapter.notifyDataSetChanged()
             }, {}))
     }
 
