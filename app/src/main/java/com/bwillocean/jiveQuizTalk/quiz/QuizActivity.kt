@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bwillocean.jiveQuizTalk.Const
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
@@ -20,6 +21,9 @@ import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.quiz_activity.*
@@ -82,10 +86,11 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         point_text.text = PointManager.point.toString()
         point_icon.setOnClickListener(this)
         point_text.setOnClickListener(this)
+        hint.setOnClickListener(this)
     }
 
     fun showAd() {
-        AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build().let { adRequest ->
+        AdRequest.Builder().addTestDevice(Const.TEST_DEVICE_ID).build().let { adRequest ->
             adView.run {
                 adListener = object : AdListener() {
                     override fun onAdFailedToLoad(code: Int) {
@@ -119,6 +124,22 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    var rewardAd: RewardedAd? = null
+    var rewardAdCallback = object: RewardedAdCallback() {
+        override fun onUserEarnedReward(reward: RewardItem) {
+            Log.d("ad", "[reward ad] onUserEarnedReward reward=${reward.amount} type=${reward.type}")
+            PointManager.point += reward.amount
+        }
+
+        override fun onRewardedAdClosed() {
+            super.onRewardedAdClosed()
+            rewardAd = null
+            PointManager.createRewardAd(this@QuizActivity, false) {
+                rewardAd = it
+            }
+        }
+    }
+
     override fun onClick(view: View?) {
         if (quizChecked) {
             return
@@ -132,15 +153,18 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         when (view?.id) {
             R.id.point_icon, R.id.point_text -> {
                 if (PointManager.point == 0) {
-                    PointManager.createFullAd(this@QuizActivity) {
-                        it.show()
+                    if (rewardAd == null) {
+                        PointManager.createRewardAd(this@QuizActivity) { rewardAd ->
+                            rewardAd.show(this@QuizActivity, rewardAdCallback)
+                        }
+                    } else {
+                        rewardAd?.show(this@QuizActivity, rewardAdCallback)
+                        rewardAd = null
                     }
-                } else {
-                    PointManager.point -= PointManager.HINT_POINT
-
-                    //TODO hint
-                    Toast.makeText(this, "힌트 처리 어케 하지? 딤드 이미지 줘요0", Toast.LENGTH_SHORT).show()
                 }
+            }
+            R.id.hint -> {
+                Toast.makeText(this, "힌트는 어떻게 처리하죠 ?", Toast.LENGTH_SHORT).show()
             }
             R.id.statement_1 -> {
                 checkCorrectness(view)

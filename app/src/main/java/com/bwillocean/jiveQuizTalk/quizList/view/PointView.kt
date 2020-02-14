@@ -1,5 +1,6 @@
 package com.bwillocean.jiveQuizTalk.quizList.view
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bwillocean.jiveQuizTalk.R
@@ -10,6 +11,9 @@ import com.bwillocean.jiveQuizTalk.data.ScoreManager
 import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.dialog.LoadingDialog
 import com.bwillocean.jiveQuizTalk.quizList.MainViewModel
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.quiz_activity.point_icon
@@ -54,12 +58,33 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
         updatePoint()
     }
 
+    var rewardAd: RewardedAd? = null
+    var rewardAdCallback = object: RewardedAdCallback() {
+        override fun onUserEarnedReward(reward: RewardItem) {
+            Log.d("ad", "[reward ad] onUserEarnedReward reward=${reward.amount} type=${reward.type}")
+            PointManager.point += reward.amount
+        }
+
+        override fun onRewardedAdClosed() {
+            super.onRewardedAdClosed()
+            this@PointView.rewardAd = null
+            PointManager.createRewardAd(activity, false) {
+                this@PointView.rewardAd = it
+            }
+        }
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.point_text, R.id.point_icon, R.id.toolbar_point_icon, R.id.toolbar_point_text -> {
                 if (PointManager.point == 0) {
-                    PointManager.createFullAd(activity) {
-                        it.show()
+                    if (rewardAd == null) {
+                        PointManager.createRewardAd(activity) { rewardAd ->
+                            rewardAd.show(activity, rewardAdCallback)
+                        }
+                    } else {
+                        this@PointView.rewardAd?.show(activity, rewardAdCallback)
+                        this@PointView.rewardAd = null
                     }
                 }
             }

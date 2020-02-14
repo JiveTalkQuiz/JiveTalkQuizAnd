@@ -30,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/hint"
         android:layout_width="59dp"
         android:layout_height="31dp"
         android:layout_marginRight="20.5dp"

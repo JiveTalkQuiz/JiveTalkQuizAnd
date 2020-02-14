@@ -1,6 +1,7 @@
 package com.bwillocean.jiveQuizTalk.quizList.view
 
 import android.util.Log
+import com.bwillocean.jiveQuizTalk.Const
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
@@ -18,7 +19,7 @@ class AdView(val activity: BaseActivity, val viewMode: MainViewModel): BaseView(
     override fun onCreate() {
         super.onCreate()
 
-        AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build().let { adRequest ->
+        AdRequest.Builder().addTestDevice(Const.TEST_DEVICE_ID).build().let { adRequest ->
             activity.adView.run {
                 adListener = object: AdListener() {
                     override fun onAdFailedToLoad(code: Int) {
