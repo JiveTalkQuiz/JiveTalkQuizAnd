@@ -28,13 +28,13 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
         activity.toolbar_point_icon.setOnClickListener(this)
         activity.reset.setOnClickListener(this)
 
-        activity.point_text.text = PointManager.point.toString()
+        updatePoint()
         updateScoreGrade()
     }
 
     override fun bindViewModel(disposable: CompositeDisposable) {
         disposable.add(PointManager.pointStream.observeOn(AndroidSchedulers.mainThread()).subscribe({
-           activity.point_text.text = PointManager.point.toString()
+            updatePoint()
         },{
             it.printStackTrace()
         }))
@@ -51,7 +51,7 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
     override fun onStart() {
         super.onStart()
         updateScoreGrade()
-        activity.point_text.text = PointManager.point.toString()
+        updatePoint()
     }
 
     override fun onClick(v: View?) {
@@ -71,6 +71,11 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
                 Toast.makeText(activity, "초기화됨", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun updatePoint() {
+        activity.point_text.text = PointManager.point.toString()
+        activity.toolbar_point_text.text = PointManager.point.toString()
     }
 
     private fun updateScoreGrade() {
