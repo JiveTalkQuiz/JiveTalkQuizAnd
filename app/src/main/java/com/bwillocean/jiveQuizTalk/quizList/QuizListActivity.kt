@@ -1,8 +1,11 @@
 package com.bwillocean.jiveQuizTalk.quizList
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
@@ -12,6 +15,9 @@ import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
 import com.bwillocean.jiveQuizTalk.quizList.view.PointView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.quiz_list_activity.*
+import kotlin.math.absoluteValue
 
 class QuizListActivity : BaseActivity() {
     companion object {
@@ -26,6 +32,13 @@ class QuizListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_list_activity)
+
+        appbarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val offsetAlpha = appbarLayout.y / appbarLayout.totalScrollRange
+            Log.v(TAG, "alpha=$offsetAlpha")
+            placeholder.alpha = 1 - offsetAlpha.absoluteValue
+            toolbar.alpha = offsetAlpha.absoluteValue
+        })
 
         mainViewModel = ViewModelProvider(this, ViewModelFactory(this))[MainViewModel::class.java]
 
@@ -44,12 +57,7 @@ class QuizListActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL && resultCode == Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ) {
-            var quizItem: QuizItem? = null
-            do {
-                quizItem = mainViewModel.nextQuiz()
-            } while (quizItem != null && SolveManager.checkQuizResult(quizItem.id))
-
-            quizItem?.let {
+            mainViewModel.nextQuiz()?.let { quizItem ->
                 mainViewModel.startQuizDetail(this, quizItem)
             } ?: run {
                 Toast.makeText(this, "문제를 모두 풀었습니다.", Toast.LENGTH_SHORT).show()

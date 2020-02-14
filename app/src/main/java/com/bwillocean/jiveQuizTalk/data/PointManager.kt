@@ -21,7 +21,7 @@ object PointManager {
     var point: Int
         get() {
             return MyApplication.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).getInt(
-                KEY_NAME_POINT, 100)
+                KEY_NAME_POINT, DEFAULT_POINT)
         }
         set(value) {
             pointStream.onNext(

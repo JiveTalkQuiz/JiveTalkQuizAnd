@@ -4,7 +4,6 @@
     android:fontFamily="@font/hana_pro"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:layout_margin="12.5dp"
     android:textSize="15dp"
     android:gravity="center"
     android:background="@drawable/stage"

@@ -3,6 +3,7 @@ package com.bwillocean.jiveQuizTalk.quizList
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.bwillocean.jiveQuizTalk.Def
@@ -38,18 +39,22 @@ class MainViewModel(val context: Context) : ViewModel() {
     }
 
     fun nextQuiz(): QuizItem? {
-        val item = quiz?.quizList?.indexOfFirst {
+        return quiz?.quizList?.indexOfFirst {
             it == lastSelectedQuiz
         }?.let {
-            if ((it+1) < (quiz?.quizList?.size ?: 0)) {
-                quiz?.quizList?.get(it + 1)
-            } else null
-        }
+            var index = it + 1
+            var quizItem: QuizItem? = null
+            do {
+                quizItem = quiz?.quizList?.get(index)
+                index++
+                Log.d(QuizListActivity.TAG, "quiz=${quizItem?.word} id=${quizItem?.id}")
+            } while (quizItem != null && SolveManager.checkQuizResult(quizItem.id))
 
-        return return if (lastSelectedQuiz == item) {
-            null
-        } else {
-            item
+            if (lastSelectedQuiz == quizItem) {
+                null
+            } else {
+                quizItem
+            }
         }
     }
 

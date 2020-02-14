@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bwillocean.jiveQuizTalk">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="com.bwillocean.jiveQuizTalk.MyApplication"
         android:allowBackup="true"

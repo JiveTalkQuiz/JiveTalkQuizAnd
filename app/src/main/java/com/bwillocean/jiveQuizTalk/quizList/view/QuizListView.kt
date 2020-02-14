@@ -1,10 +1,13 @@
 package com.bwillocean.jiveQuizTalk.quizList.view
 
+import android.graphics.Rect
 import android.util.DisplayMetrics
-import android.view.MotionEvent
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.ScoreManager
@@ -17,10 +20,10 @@ import com.bwillocean.jiveQuizTalk.quizList.QuizEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.quiz_list_activity.*
-import kotlin.math.roundToInt
+
 
 class QuizListView(private val activity: BaseActivity, val viewModel: MainViewModel): BaseView(activity) {
-    val spanCount = calculateSpanCount(75)
+    val spanCount = calculateSpanCount(70)
     val quizAdapter = QuizAdapter()
     lateinit var recyclerView: RecyclerView
 
@@ -75,6 +78,9 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
             adapter = quizAdapter
         }
 
+        val spacing = (listviewWidth() - (activity.resources.getDimensionPixelOffset(R.dimen.item_width) * spanCount)) / (spanCount - 1)
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing))
+
         quizAdapter.clickListener = View.OnClickListener { view ->
             (view?.tag as? QuizItem)?.let { quizItem ->
                 viewModel.startQuizDetail(activity, quizItem)
@@ -91,13 +97,43 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
         super.onDestroy()
     }
 
-    private fun calculateSpanCount(itemDpWidth: Int): Int {
+    private fun listviewWidth(): Int {
+        return displayWidth() - (activity.resources.getDimensionPixelOffset(R.dimen.main_list_margin) * 2)
+    }
+
+    private fun displayWidth(): Int {
         val display = activity.windowManager.defaultDisplay
         val outMetrics = DisplayMetrics()
         display.getMetrics(outMetrics)
+        return outMetrics.widthPixels
+    }
 
+    private fun calculateSpanCount(itemDpWidth: Int): Int {
         val density = activity.resources.displayMetrics.density
-        val dpWidth = outMetrics.widthPixels / density
-        return (dpWidth / itemDpWidth).roundToInt()
+        val dpWidth = (displayWidth() / density) - 60
+        return (dpWidth / itemDpWidth).toInt()
+    }
+}
+
+class GridSpacingItemDecoration(
+    private val spanCount: Int,
+    private val spacing: Int
+) : ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view) // item position
+        val column = position % spanCount // item column
+
+        outRect.left = column * spacing / spanCount
+        outRect.right = spacing - (column + 1) * spacing / spanCount
+        /*if (position >= spanCount) {
+            outRect.top = spacing
+        }*/
+        outRect.top = spacing
+        Log.v("test","$position is left ${outRect.left} right ${outRect.right} spacing $spacing")
     }
 }

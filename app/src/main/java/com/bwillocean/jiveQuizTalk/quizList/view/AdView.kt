@@ -18,7 +18,7 @@ class AdView(val activity: BaseActivity, val viewMode: MainViewModel): BaseView(
     override fun onCreate() {
         super.onCreate()
 
-        AdRequest.Builder().build().let { adRequest ->
+        AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build().let { adRequest ->
             activity.adView.run {
                 adListener = object: AdListener() {
                     override fun onAdFailedToLoad(code: Int) {

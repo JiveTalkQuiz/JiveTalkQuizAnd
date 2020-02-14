@@ -8,6 +8,7 @@ import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.PointManager
 import com.bwillocean.jiveQuizTalk.data.ScoreManager
 import com.bwillocean.jiveQuizTalk.data.SolveManager
+import com.bwillocean.jiveQuizTalk.dialog.LoadingDialog
 import com.bwillocean.jiveQuizTalk.quizList.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,6 +24,8 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
 
         activity.point_text.setOnClickListener(this)
         activity.point_icon.setOnClickListener(this)
+        activity.toolbar_point_text.setOnClickListener(this)
+        activity.toolbar_point_icon.setOnClickListener(this)
         activity.reset.setOnClickListener(this)
 
         activity.point_text.text = PointManager.point.toString()
@@ -45,14 +48,16 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
 
     override fun unbindViewModel() {}
 
+    override fun onStart() {
+        super.onStart()
+        updateScoreGrade()
+        activity.point_text.text = PointManager.point.toString()
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.point_text, R.id.point_icon -> {
+            R.id.point_text, R.id.point_icon, R.id.toolbar_point_icon, R.id.toolbar_point_text -> {
                 if (PointManager.point == 0) {
-                    PointManager.createFullAd(activity) {
-                        it.show()
-                    }
-                } else {
                     PointManager.createFullAd(activity) {
                         it.show()
                     }

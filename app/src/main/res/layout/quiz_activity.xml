@@ -78,7 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/hana_pro"
-            android:singleLine="true"
+            android:maxLines="2"
+            android:singleLine="false"
             android:textColor="@color/greenPointColor"
             android:textSize="50dp" />
 
