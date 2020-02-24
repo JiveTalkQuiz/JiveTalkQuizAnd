@@ -1,7 +1,9 @@
 package com.bwillocean.jiveQuizTalk.arch
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.graphics.Typeface
+import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
@@ -15,15 +17,29 @@ interface ConfigurationDelegate {
     fun onConfigurationChanged(newConfig: Configuration?)
 }
 
+enum class ActivityState {
+    CREATED, STARTED, STOPED, DESTROYED
+}
+
 open class BaseActivity: AppCompatActivity() {
+    companion object {
+        val stateMap = mutableMapOf<Int, ActivityState>()
+    }
+
     private val baseViewList = mutableListOf<BaseView>()
     private val handler = Handler()
-    private val goBackground = Runnable {
-        SoundManager.bgMediaPlayer.stop()
+    private val changeState = Runnable {
+        val anyStarted = stateMap.values.any {
+            it == ActivityState.STARTED
+        }
+
+        if (anyStarted) {
+            SoundManager.resumeBg()
+        } else {
+            SoundManager.pauseBg()
+        }
     }
-    private val goForeground = Runnable {
-        SoundManager.playBg()
-    }
+
 
     fun addBaseView(baseView: BaseView) {
         if (!baseViewList.contains(baseView)) {
@@ -31,18 +47,30 @@ open class BaseActivity: AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        handler.removeCallbacks(goBackground)
-        handler.removeCallbacks(goForeground)
-        handler.postDelayed(goForeground, 300)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        stateMap[this.hashCode()] = ActivityState.CREATED
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        stateMap[this.hashCode()] = ActivityState.STARTED
+
+        handler.removeCallbacks(changeState)
+        handler.postDelayed(changeState, 1000)
     }
 
     override fun onStop() {
         super.onStop()
-        handler.removeCallbacks(goForeground)
-        handler.removeCallbacks(goBackground)
-        handler.postDelayed(goBackground, 300)
+        stateMap[this.hashCode()] = ActivityState.STOPED
+
+        handler.removeCallbacks(changeState)
+        handler.postDelayed(changeState, 1000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stateMap[this.hashCode()] = ActivityState.DESTROYED
     }
 
     override fun setContentView(layoutResID: Int) {

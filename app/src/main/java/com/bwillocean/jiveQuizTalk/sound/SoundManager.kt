@@ -6,11 +6,18 @@ import com.bwillocean.jiveQuizTalk.R
 
 
 object SoundManager {
+    private fun tempPlay(mp: MediaPlayer) {
+        mp.setOnCompletionListener {
+            it.stop()
+            it.release()
+        }
+        mp.start()
+    }
 
     fun correctEffect() {
         Thread(Runnable {
             val mp: MediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.correct)
-            mp.start()
+            tempPlay(mp)
         }).start()
 
     }
@@ -18,7 +25,7 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.incorrect)
-            mp.start()
+            tempPlay(mp)
         }).start()
     }
 
@@ -26,7 +33,7 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.empty)
-            mp.start()
+            tempPlay(mp)
         }).start()
     }
 
@@ -34,19 +41,29 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.start)
-            mp.start()
+            tempPlay(mp)
         }).start()
     }
 
-    val bgMediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.bg)
+    var bgMediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.bg)
     fun playBg() {
         if (!bgMediaPlayer.isPlaying) {
-            bgMediaPlayer.isLooping = true
             Thread(Runnable {
+                bgMediaPlayer.isLooping = true
                 bgMediaPlayer.start()
             }).also{
                 it.isDaemon = true
             }.start()
+        }
+    }
+    fun pauseBg() {
+        if (bgMediaPlayer.isPlaying) {
+            bgMediaPlayer.pause()
+        }
+    }
+    fun resumeBg() {
+        if (!bgMediaPlayer.isPlaying) {
+            bgMediaPlayer.start()
         }
     }
 }
