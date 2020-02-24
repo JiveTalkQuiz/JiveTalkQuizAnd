@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -23,6 +24,7 @@ enum class ActivityState {
 
 open class BaseActivity: AppCompatActivity() {
     companion object {
+        val TAG = "BaseActivity"
         val stateMap = mutableMapOf<Int, ActivityState>()
     }
 
@@ -30,12 +32,15 @@ open class BaseActivity: AppCompatActivity() {
     private val handler = Handler()
     private val changeState = Runnable {
         val anyStarted = stateMap.values.any {
-            it == ActivityState.STARTED
+            it == ActivityState.STARTED || it == ActivityState.CREATED
         }
+        Log.e(TAG, "[bg] changeState ${stateMap.values}")
 
         if (anyStarted) {
+            Log.e(TAG, "[bg] anyStarted")
             SoundManager.resumeBg()
         } else {
+            Log.e(TAG, "[bg] allBg")
             SoundManager.pauseBg()
         }
     }
@@ -57,7 +62,7 @@ open class BaseActivity: AppCompatActivity() {
         stateMap[this.hashCode()] = ActivityState.STARTED
 
         handler.removeCallbacks(changeState)
-        handler.postDelayed(changeState, 1000)
+        handler.postDelayed(changeState, 500)
     }
 
     override fun onStop() {
@@ -65,7 +70,7 @@ open class BaseActivity: AppCompatActivity() {
         stateMap[this.hashCode()] = ActivityState.STOPED
 
         handler.removeCallbacks(changeState)
-        handler.postDelayed(changeState, 1000)
+        handler.postDelayed(changeState, 500)
     }
 
     override fun onDestroy() {
