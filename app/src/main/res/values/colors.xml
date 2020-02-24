@@ -7,8 +7,10 @@
     <color name="quiz_main_background">#c7dfd5</color>
     <color name="white">#ffffff</color>
     <color name="greenPointColor">#368084</color>
+    <color name="hintBgColor">#19e6e6e6</color>
     <color name="activity_background">#c7dfd5</color>
     <color name="dialog_fail_text_color">#8f8f8f</color>
     <color name="transparent">#00ffffff</color>
     <color name="loading_progress_accent_color">#ff3283e8</color>
+    <color name="hint_text_color">#c7dfd5</color>
 </resources>

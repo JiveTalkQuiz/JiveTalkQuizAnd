@@ -13,6 +13,7 @@ import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.quiz.QuizActivity
+import com.bwillocean.jiveQuizTalk.sound.SoundManager
 import io.reactivex.subjects.BehaviorSubject
 
 enum class QuizEvent {
@@ -64,6 +65,7 @@ class MainViewModel(val context: Context) : ViewModel() {
         val passed = SolveManager.checkQuizResult(quizItem.id)
         if(!passed) {
             if (PointManager.point < PointManager.USE_POINT) {
+                SoundManager.noMoney()
                 Toast.makeText(activity, "포인트를 충전해 주세요", Toast.LENGTH_SHORT).show()
                 return
             }
@@ -74,6 +76,7 @@ class MainViewModel(val context: Context) : ViewModel() {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             this.putExtra(QuizActivity.EXTRAS_KEY, quizItem)
         }.run {
+            SoundManager.quizStart()
             activity.startActivityForResult(this, Def.ACTIVITY_REQUEST_CODE_QUIZ_DETAIL)
         }
     }

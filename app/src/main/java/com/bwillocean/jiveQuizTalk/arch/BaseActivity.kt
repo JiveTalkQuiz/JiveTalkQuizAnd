@@ -2,12 +2,14 @@ package com.bwillocean.jiveQuizTalk.arch
 
 import android.content.res.Configuration
 import android.graphics.Typeface
+import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.bwillocean.jiveQuizTalk.R
+import com.bwillocean.jiveQuizTalk.sound.SoundManager
 
 interface ConfigurationDelegate {
     fun onConfigurationChanged(newConfig: Configuration?)
@@ -15,11 +17,32 @@ interface ConfigurationDelegate {
 
 open class BaseActivity: AppCompatActivity() {
     private val baseViewList = mutableListOf<BaseView>()
+    private val handler = Handler()
+    private val goBackground = Runnable {
+        SoundManager.bgMediaPlayer.stop()
+    }
+    private val goForeground = Runnable {
+        SoundManager.playBg()
+    }
 
     fun addBaseView(baseView: BaseView) {
         if (!baseViewList.contains(baseView)) {
             baseViewList.add(baseView)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        handler.removeCallbacks(goBackground)
+        handler.removeCallbacks(goForeground)
+        handler.postDelayed(goForeground, 300)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(goForeground)
+        handler.removeCallbacks(goBackground)
+        handler.postDelayed(goBackground, 300)
     }
 
     override fun setContentView(layoutResID: Int) {

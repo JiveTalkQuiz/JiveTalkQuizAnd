@@ -1,20 +1,17 @@
 package com.bwillocean.jiveQuizTalk.quizList
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
-import com.bwillocean.jiveQuizTalk.data.SolveManager
-import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
 import com.bwillocean.jiveQuizTalk.quizList.view.PointView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
+import com.bwillocean.jiveQuizTalk.sound.SoundManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.quiz_list_activity.*
 import kotlin.math.absoluteValue
@@ -47,6 +44,8 @@ class QuizListActivity : BaseActivity() {
         pointView = PointView(this, mainViewModel)
 
         mainViewModel.loadData()
+
+        SoundManager.playBg()
     }
 
     override fun onDestroy() {

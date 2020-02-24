@@ -10,14 +10,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.bwillocean.jiveQuizTalk.Const
 import com.bwillocean.jiveQuizTalk.Def
 import com.bwillocean.jiveQuizTalk.R
+import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.dialog.ResponseDialogUtil
 import com.bwillocean.jiveQuizTalk.data.PointManager
 import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.quizList.QuizListActivity
+import com.bwillocean.jiveQuizTalk.sound.SoundManager
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -28,12 +31,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.quiz_activity.*
 import kotlinx.android.synthetic.main.quiz_list_activity.adView
+import java.util.*
 
 
 class QuizUIViews(val layer: ViewGroup, val answerText: TextView, val icon: ImageView)
 
-class QuizActivity : AppCompatActivity(), View.OnClickListener {
+class QuizActivity : BaseActivity(), View.OnClickListener {
     companion object {
+        const val TAG = "QuizActivity"
         const val EXTRAS_KEY = "quizItem"
     }
 
@@ -107,6 +112,8 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         quiz_main_title.text = "제${quizItem.id}장"
         quiz_main_text.text = quizItem.word.trim()
 
+        val hintPosition = SolveManager.checkHint(quizId = quizItem.id)
+
         quizItem.selection.take(5).forEachIndexed { index, quizSelection ->
             quizUIViews[index].layer.visibility = View.VISIBLE
 
@@ -120,6 +127,12 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                 quizUIViews[index].answerText.text = quizSelection.statement
                 quizUIViews[index].layer.tag = quizSelection.isCorrect
                 quizUIViews[index].layer.setOnClickListener(this)
+                quizUIViews[index].answerText.setTextColor(ResourcesCompat.getColor(this@QuizActivity.resources, R.color.greenPointColor, null))
+                quizUIViews[index].layer.setBackgroundResource(R.drawable.white_rounded_bg)
+
+                if (hintPosition == index) {
+                    quizUIViews[index].layer.alpha = 0.4f
+                }
             }
         }
     }
@@ -164,25 +177,50 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.hint -> {
-                Toast.makeText(this, "힌트는 어떻게 처리하죠 ?", Toast.LENGTH_SHORT).show()
+                if (SolveManager.checkHint(quizItem.id) < 0) {
+                    var hintPos = -1
+                    do {
+                        hintPos = Random(System.currentTimeMillis()).nextInt(quizItem.selection.size)
+                    } while(quizItem.selection[hintPos].isCorrect)
+
+                    SolveManager.setHint(quizItem.id, hintPos)
+                    showQuiz()
+                } else {
+                    Toast.makeText(this@QuizActivity, "이미 힌트를 사용하셨습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.statement_1 -> {
+                if(SolveManager.checkHint(quizId = quizItem.id) == 0) {
+                    return
+                }
                 checkCorrectness(view)
                 submit(0)
             }
             R.id.statement_2 -> {
+                if(SolveManager.checkHint(quizId = quizItem.id) == 1) {
+                    return
+                }
                 checkCorrectness(view)
                 submit(1)
             }
             R.id.statement_3 -> {
+                if(SolveManager.checkHint(quizId = quizItem.id) == 2) {
+                    return
+                }
                 checkCorrectness(view)
                 submit(2)
             }
             R.id.statement_4 -> {
+                if(SolveManager.checkHint(quizId = quizItem.id) == 3) {
+                    return
+                }
                 checkCorrectness(view)
                 submit(3)
             }
             R.id.statement_5 -> {
+                if(SolveManager.checkHint(quizId = quizItem.id) == 4) {
+                    return
+                }
                 checkCorrectness(view)
                 submit(4)
             }
@@ -205,12 +243,14 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun checkCorrectness(view: View) {
         if (view.tag as? Boolean == true) {
+            SoundManager.correctEffect()
             ResponseDialogUtil.responseDialog(this, true, DialogInterface.OnCancelListener {
                 SolveManager.solveQuiz(quizItem.id)
                 setResult(Def.ACTIVITY_RESPONSE_CODE_NEXT_QUIZ)
                 finish()
             })
         } else {
+            SoundManager.incorrectEffect()
             ResponseDialogUtil.responseDialog(this, false, DialogInterface.OnCancelListener {
                 finish()
             })
