@@ -25,6 +25,9 @@
         android:text="땡!"
         android:textColor="@color/dialog_fail_text_color"
         android:textSize="20dp"
+        android:shadowColor="#33000000"
+        android:shadowDx="7.0"
+        android:shadowDy="7.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/correct_icon" />

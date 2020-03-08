@@ -104,6 +104,9 @@
             android:gravity="center"
             android:singleLine="true"
             android:textColor="@color/greenPointColor"
+            android:shadowColor="#33000000"
+            android:shadowDx="7.0"
+            android:shadowDy="7.0"
             android:textSize="15dp" />
 
         <ImageView

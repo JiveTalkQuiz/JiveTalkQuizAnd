@@ -11,6 +11,7 @@ import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.quizList.view.AdView
 import com.bwillocean.jiveQuizTalk.quizList.view.PointView
 import com.bwillocean.jiveQuizTalk.quizList.view.QuizListView
+import com.bwillocean.jiveQuizTalk.quizList.view.SoundView
 import com.bwillocean.jiveQuizTalk.sound.SoundManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.quiz_list_activity.*
@@ -25,6 +26,7 @@ class QuizListActivity : BaseActivity() {
     lateinit var adView: AdView
     lateinit var mainView: QuizListView
     lateinit var pointView: PointView
+    lateinit var soundView: SoundView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,7 @@ class QuizListActivity : BaseActivity() {
         adView = AdView(this, mainViewModel)
         mainView = QuizListView(this, mainViewModel)
         pointView = PointView(this, mainViewModel)
+        soundView = SoundView(this, mainViewModel)
 
         mainViewModel.loadData()
 
