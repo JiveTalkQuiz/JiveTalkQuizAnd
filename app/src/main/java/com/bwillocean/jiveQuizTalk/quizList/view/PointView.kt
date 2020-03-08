@@ -58,33 +58,18 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
         updatePoint()
     }
 
-    var rewardAd: RewardedAd? = null
-    var rewardAdCallback = object: RewardedAdCallback() {
-        override fun onUserEarnedReward(reward: RewardItem) {
-            Log.d("ad", "[reward ad] onUserEarnedReward reward=${reward.amount} type=${reward.type}")
-            PointManager.point += reward.amount
-        }
-
-        override fun onRewardedAdClosed() {
-            super.onRewardedAdClosed()
-            this@PointView.rewardAd = null
-            PointManager.createRewardAd(activity, false) {
-                this@PointView.rewardAd = it
-            }
-        }
-    }
-
+    val rewardAdCallback = PointManager.QuizRewardedAdCallback(activity)
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.point_text, R.id.point_icon, R.id.toolbar_point_icon, R.id.toolbar_point_text -> {
                 if (PointManager.point == 0) {
-                    if (rewardAd == null) {
+                    if (PointManager.rewardAd == null) {
                         PointManager.createRewardAd(activity) { rewardAd ->
                             rewardAd.show(activity, rewardAdCallback)
                         }
                     } else {
-                        this@PointView.rewardAd?.show(activity, rewardAdCallback)
-                        this@PointView.rewardAd = null
+                        PointManager.rewardAd?.show(activity, rewardAdCallback)
+                        PointManager.rewardAd = null
                     }
                 }
             }
@@ -104,31 +89,9 @@ class PointView (val activity: BaseActivity, val viewModel: MainViewModel): Base
     }
 
     private fun updateScoreGrade() {
-        when(ScoreManager.score) {
-            in 0..20 -> {
-                activity.score_desc_title.text = "라떼는 말이야~"
-                activity.score_grade_title.text = "Lv. 아재"
-            }
-            in 21..40 -> {
-                activity.score_desc_title.text = "아 어려워 급식체 거부!"
-                activity.score_grade_title.text = "Lv. 문찐"
-            }
-            in 41..60 -> {
-                activity.score_desc_title.text = "이걸 또 줄여? 하 불편해"
-                activity.score_grade_title.text = "Lv. 프로불편러"
-            }
-            in 61..80 -> {
-                activity.score_desc_title.text = "오~ 당신은 놀줄아는 놈"
-                activity.score_grade_title.text = "Lv. 오 놀아봄"
-            }
-            in 81..100-> {
-                activity.score_desc_title.text = "이런다고 인싸 안되는거 아는 당신은"
-                activity.score_grade_title.text = "Lv. 인싸"
-            }
-            else -> {
-                activity.score_desc_title.text = "존경합니다."
-                activity.score_grade_title.text = "Lv. 신"
-            }
+        ScoreManager.pointLeveLString().let { (descTitle, gradeTitle) ->
+            activity.score_desc_title.text = descTitle
+            activity.score_grade_title.text = gradeTitle
         }
     }
 }

@@ -137,21 +137,7 @@ class QuizActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    var rewardAd: RewardedAd? = null
-    var rewardAdCallback = object: RewardedAdCallback() {
-        override fun onUserEarnedReward(reward: RewardItem) {
-            Log.d("ad", "[reward ad] onUserEarnedReward reward=${reward.amount} type=${reward.type}")
-            PointManager.point += reward.amount
-        }
-
-        override fun onRewardedAdClosed() {
-            super.onRewardedAdClosed()
-            rewardAd = null
-            PointManager.createRewardAd(this@QuizActivity, false) {
-                rewardAd = it
-            }
-        }
-    }
+    val rewardAdCallback = PointManager.QuizRewardedAdCallback(this)
 
     override fun onClick(view: View?) {
         if (quizChecked) {
@@ -166,13 +152,13 @@ class QuizActivity : BaseActivity(), View.OnClickListener {
         when (view?.id) {
             R.id.point_icon, R.id.point_text -> {
                 if (PointManager.point == 0) {
-                    if (rewardAd == null) {
+                    if (PointManager.rewardAd == null) {
                         PointManager.createRewardAd(this@QuizActivity) { rewardAd ->
                             rewardAd.show(this@QuizActivity, rewardAdCallback)
                         }
                     } else {
-                        rewardAd?.show(this@QuizActivity, rewardAdCallback)
-                        rewardAd = null
+                        PointManager.rewardAd?.show(this@QuizActivity, rewardAdCallback)
+                        PointManager.rewardAd = null
                     }
                 }
             }
@@ -250,6 +236,7 @@ class QuizActivity : BaseActivity(), View.OnClickListener {
                 finish()
             })
         } else {
+            PointManager.point -= PointManager.FAIL_POINT
             SoundManager.incorrectEffect()
             ResponseDialogUtil.responseDialog(this, false, DialogInterface.OnCancelListener {
                 finish()

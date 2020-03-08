@@ -38,7 +38,7 @@ open class BaseActivity: AppCompatActivity() {
 
         if (anyStarted) {
             Log.e(TAG, "[bg] anyStarted")
-            SoundManager.resumeBg()
+            SoundManager.playBg()
         } else {
             Log.e(TAG, "[bg] allBg")
             SoundManager.pauseBg()

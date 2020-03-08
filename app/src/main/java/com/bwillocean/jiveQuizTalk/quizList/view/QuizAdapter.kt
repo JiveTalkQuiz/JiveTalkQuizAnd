@@ -12,6 +12,7 @@ import com.bwillocean.jiveQuizTalk.data.ScoreManager
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import kotlinx.android.synthetic.main.quiz_item.view.*
+import kotlinx.android.synthetic.main.quiz_list_activity.*
 import kotlinx.android.synthetic.main.quiz_list_header.view.*
 import kotlin.math.max
 
@@ -24,6 +25,9 @@ class QuizHeaderHolder(view: View): RecyclerView.ViewHolder(view) {
     val scoreGradeTitle = view.score_grade_title
 }
 
+interface OnSelectListener {
+    fun onSelected(position: Int, holder: QuizViewHolder)
+}
 class QuizAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TYPE_ITEM = 0
@@ -36,7 +40,7 @@ class QuizAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    var clickListener: View.OnClickListener? = null
+    var clickListener: OnSelectListener? = null
 
     private var list = listOf<QuizItem>()
 
@@ -55,12 +59,12 @@ class QuizAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 QuizHeaderHolder(it)
             }
         } else {
-            LayoutInflater.from(parent.context).inflate(R.layout.quiz_item, parent, false).also {
-                it.setOnClickListener {
-                    clickListener?.onClick(it)
-                }
-            }.let {
+            LayoutInflater.from(parent.context).inflate(R.layout.quiz_item, parent, false).let {
                 QuizViewHolder(it)
+            }.also { holder ->
+                holder.itemView.setOnClickListener {
+                    clickListener?.onSelected(holder.adapterPosition, holder)
+                }
             }
         }
     }
@@ -72,32 +76,9 @@ class QuizAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuizHeaderHolder) {
             holder.pointTitle.text = PointManager.point.toString()
-
-            when(ScoreManager.score) {
-                in 0..20 -> {
-                    holder.scoreGradeTitle.text = "라떼는 말이야~"
-                    holder.scoreTitle.text = "Lv. 아재"
-                }
-                in 21..40 -> {
-                    holder.scoreGradeTitle.text = "아 어려워 급식체 거부!"
-                    holder.scoreTitle.text = "Lv. 문찐"
-                }
-                in 41..60 -> {
-                    holder.scoreGradeTitle.text = "이걸 또 줄여? 하 불편해"
-                    holder.scoreTitle.text = "Lv. 프로불편러"
-                }
-                in 61..80 -> {
-                    holder.scoreGradeTitle.text = "오~ 당신은 놀줄아는 놈"
-                    holder.scoreTitle.text = "Lv. 오 놀아봄"
-                }
-                in 81..100-> {
-                    holder.scoreGradeTitle.text = "이런다고 인싸 안되는거 아는 당신은"
-                    holder.scoreTitle.text = "Lv. 인싸"
-                }
-                else -> {
-                    holder.scoreGradeTitle.text = "존경합니다."
-                    holder.scoreTitle.text = "Lv. 신"
-                }
+            ScoreManager.pointLeveLString().let { (descTitle, gradeTitle) ->
+                holder.scoreGradeTitle.text = descTitle
+                holder.scoreTitle.text = gradeTitle
             }
         } else if (holder is QuizViewHolder){
             holder.itemView.tag = list[relativePosition(position)]

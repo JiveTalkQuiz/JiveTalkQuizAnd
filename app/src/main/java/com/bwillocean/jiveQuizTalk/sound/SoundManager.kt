@@ -3,6 +3,7 @@ package com.bwillocean.jiveQuizTalk.sound
 import android.media.MediaPlayer
 import com.bwillocean.jiveQuizTalk.MyApplication
 import com.bwillocean.jiveQuizTalk.R
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 
 
 object SoundManager {
@@ -45,25 +46,19 @@ object SoundManager {
         }).start()
     }
 
-    var bgMediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.bg)
+    var bgMediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.bg).also {
+        it.isLooping = true
+    }
     fun playBg() {
-        if (!bgMediaPlayer.isPlaying) {
-            Thread(Runnable {
-                bgMediaPlayer.isLooping = true
+        if (SolveManager.getSound()) {
+            if (!bgMediaPlayer.isPlaying) {
                 bgMediaPlayer.start()
-            }).also{
-                it.isDaemon = true
-            }.start()
+            }
         }
     }
     fun pauseBg() {
         if (bgMediaPlayer.isPlaying) {
             bgMediaPlayer.pause()
-        }
-    }
-    fun resumeBg() {
-        if (!bgMediaPlayer.isPlaying) {
-            bgMediaPlayer.start()
         }
     }
 }

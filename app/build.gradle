@@ -11,18 +11,18 @@ android {
         applicationId "com.bwillocean.jiveQuizTalk"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.4"
+        versionCode 2
+        versionName "0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
 
     signingConfigs {
         release {
-            storeFile file('singed_key.jks')
-            keyAlias "bwillocean"
-            storePassword "no1quiz!!"
-            keyPassword "no1quiz!!"
+            storeFile file('upload_singed_key.jks')
+            keyAlias "upload"
+            storePassword "bwillocean!"
+            keyPassword "bwillocean!"
         }
     }
 

@@ -64,12 +64,11 @@ class MainViewModel(val context: Context) : ViewModel() {
 
         val passed = SolveManager.checkQuizResult(quizItem.id)
         if(!passed) {
-            if (PointManager.point < PointManager.USE_POINT) {
+            if (PointManager.point < 1) {
                 SoundManager.noMoney()
                 Toast.makeText(activity, "포인트를 충전해 주세요", Toast.LENGTH_SHORT).show()
                 return
             }
-            PointManager.point -= PointManager.USE_POINT
         }
 
         Intent(activity, QuizActivity::class.java).apply {

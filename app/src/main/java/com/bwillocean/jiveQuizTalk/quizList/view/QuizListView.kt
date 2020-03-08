@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -11,6 +12,7 @@ import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.arch.BaseActivity
 import com.bwillocean.jiveQuizTalk.arch.BaseView
 import com.bwillocean.jiveQuizTalk.data.ScoreManager
+import com.bwillocean.jiveQuizTalk.data.SolveManager
 import com.bwillocean.jiveQuizTalk.data.model.Quiz
 import com.bwillocean.jiveQuizTalk.data.model.QuizItem
 import com.bwillocean.jiveQuizTalk.data.model.QuizSelection
@@ -80,10 +82,17 @@ class QuizListView(private val activity: BaseActivity, val viewModel: MainViewMo
 
         val spacing = (listviewWidth() - (activity.resources.getDimensionPixelOffset(R.dimen.item_width) * spanCount)) / (spanCount - 1)
         recyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing))
+        quizAdapter.clickListener = object: OnSelectListener {
+            override fun onSelected(position: Int, holder: QuizViewHolder) {
+                val checkQuizId = position//position 은 1 작고 ID 는 1부터 시작하니 이게 이전 문제 ID
 
-        quizAdapter.clickListener = View.OnClickListener { view ->
-            (view?.tag as? QuizItem)?.let { quizItem ->
-                viewModel.startQuizDetail(activity, quizItem)
+                if(position == 0 || SolveManager.checkQuizResult(checkQuizId)) {
+                    (holder.itemView.tag as? QuizItem)?.let { quizItem ->
+                        viewModel.startQuizDetail(activity, quizItem)
+                    }
+                } else {
+                    Toast.makeText(activity, "이전 문제를 먼저 풀어 주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

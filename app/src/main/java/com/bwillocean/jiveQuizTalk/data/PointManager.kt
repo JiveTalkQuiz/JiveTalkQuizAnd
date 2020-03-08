@@ -6,20 +6,24 @@ import android.util.Log
 import com.bwillocean.jiveQuizTalk.Const
 import com.bwillocean.jiveQuizTalk.MyApplication
 import com.bwillocean.jiveQuizTalk.dialog.LoadingDialog
+import com.bwillocean.jiveQuizTalk.sound.SoundManager
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import io.reactivex.subjects.PublishSubject
+import kotlin.math.max
 
 
 object PointManager {
     const val DEFAULT_POINT = 15
-    const val FAIL_POINT = 1
-    const val HINT_POINT = 2
+    const val FAIL_POINT = 3
+    const val LEVEL_UP = 5
+    const val HINT_POINT = 1
     const val AD_POINT = 15
-    const val USE_POINT = 1
     const val PREF_NAME = "point_pref"
     const val KEY_NAME_POINT = "point"
     var point: Int
@@ -34,7 +38,7 @@ object PointManager {
 
             MyApplication.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit().putInt(
                 KEY_NAME_POINT,
-                kotlin.math.max(0, value)
+                max(0, value)
             ).apply()
         }
 
@@ -56,6 +60,36 @@ object PointManager {
             }
         }
         rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+    }
+
+    var rewardAd: RewardedAd? = null
+    class QuizRewardedAdCallback(val activity: Activity): RewardedAdCallback() {
+        override fun onRewardedAdFailedToShow(p0: Int) {
+            super.onRewardedAdFailedToShow(p0)
+            SoundManager.playBg()
+        }
+
+        override fun onRewardedAdOpened() {
+            super.onRewardedAdOpened()
+            SoundManager.pauseBg()
+        }
+
+        override fun onUserEarnedReward(reward: RewardItem) {
+            Log.d("ad", "[reward ad] onUserEarnedReward reward=${reward.amount} type=${reward.type}")
+            if(point < 5) { //혹시나 몰라서 여유 있게 원래는 0 이여야 한다.s
+                point += max(AD_POINT, reward.amount)
+            }
+        }
+
+        override fun onRewardedAdClosed() {
+            super.onRewardedAdClosed()
+            SoundManager.playBg()
+
+            rewardAd = null
+            createRewardAd(activity, false) {
+                rewardAd = it
+            }
+        }
     }
 
     fun createFullAd(activity: Activity, callback: (InterstitialAd) -> Unit){
