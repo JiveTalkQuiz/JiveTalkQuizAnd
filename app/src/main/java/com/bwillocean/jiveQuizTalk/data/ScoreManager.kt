@@ -33,8 +33,8 @@ object ScoreManager {
 
     fun scoreLevel(newScore: Int): Int {
         return when(newScore) {
-            in 0..5 -> 0
-            in 6..40 -> 1
+            in 0..20 -> 0
+            in 21..40 -> 1
             in 41..60 -> 2
             in 61..80 -> 3
             in 81..100-> 4
