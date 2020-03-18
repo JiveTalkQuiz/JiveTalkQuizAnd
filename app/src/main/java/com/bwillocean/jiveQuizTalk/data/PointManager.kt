@@ -47,7 +47,7 @@ object PointManager {
     fun createRewardAd(activity: Activity, showLoading: Boolean = true, loaded: (RewardedAd) -> Unit) {
         if (showLoading)
             LoadingDialog.showLoading(activity, 3*1000)
-        val rewardedAd = RewardedAd(activity, Const.AD_UNIT_REWARD_TEST)
+        val rewardedAd = RewardedAd(activity, Const.AD_UNIT_REWARD)
         val adLoadCallback: RewardedAdLoadCallback = object : RewardedAdLoadCallback() {
             override fun onRewardedAdLoaded() { // Ad successfully loaded.
                 LoadingDialog.hideLoading()
@@ -116,6 +116,6 @@ object PointManager {
                 })
             }
         }
-        interstitialAd.loadAd(AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build())
+        interstitialAd.loadAd(AdRequest.Builder().build())
     }
 }

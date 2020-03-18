@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">quiz</string>
     <string name="list_main_title">신조어테스트</string>
+    <string name="app_ad_id">ca-app-pub-4394316480067202~9364510395</string>
+    <string name="app_banner1_id">ca-app-pub-4394316480067202/9172938703</string>
+    <string name="app_banner2_id">ca-app-pub-4394316480067202/2454459443</string>
+
 </resources>

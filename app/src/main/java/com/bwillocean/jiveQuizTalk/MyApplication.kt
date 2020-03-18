@@ -23,7 +23,7 @@ class MyApplication: MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        MobileAds.initialize(this, "ca-app-pub-4146232804662233~8970322408")
+        MobileAds.initialize(this, getString(R.string.app_ad_id))
         instance = this
         handler = Handler(this.mainLooper)
     }

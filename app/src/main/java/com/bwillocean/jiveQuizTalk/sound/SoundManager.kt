@@ -1,6 +1,10 @@
 package com.bwillocean.jiveQuizTalk.sound
 
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.rtp.AudioStream
+import androidx.core.app.NotificationCompat
 import com.bwillocean.jiveQuizTalk.MyApplication
 import com.bwillocean.jiveQuizTalk.R
 import com.bwillocean.jiveQuizTalk.data.SolveManager
@@ -18,6 +22,9 @@ object SoundManager {
     fun correctEffect() {
         Thread(Runnable {
             val mp: MediaPlayer = MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.correct)
+            mp.setAudioAttributes(AudioAttributes.Builder().apply {
+                this.setLegacyStreamType(AudioManager.STREAM_ALARM)
+            }.build())
             tempPlay(mp)
         }).start()
 
@@ -26,6 +33,9 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.incorrect)
+            mp.setAudioAttributes(AudioAttributes.Builder().apply {
+                this.setLegacyStreamType(AudioManager.STREAM_ALARM)
+            }.build())
             tempPlay(mp)
         }).start()
     }
@@ -34,6 +44,9 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.empty)
+            mp.setAudioAttributes(AudioAttributes.Builder().apply {
+                this.setLegacyStreamType(AudioManager.STREAM_ALARM)
+            }.build())
             tempPlay(mp)
         }).start()
     }
@@ -42,6 +55,9 @@ object SoundManager {
         Thread(Runnable {
             val mp: MediaPlayer =
                 MediaPlayer.create(MyApplication.instance.applicationContext, R.raw.start)
+            mp.setAudioAttributes(AudioAttributes.Builder().apply {
+                this.setLegacyStreamType(AudioManager.STREAM_ALARM)
+            }.build())
             tempPlay(mp)
         }).start()
     }

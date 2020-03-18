@@ -6,5 +6,5 @@ object Const {
     const val AD_UNIT_BANNER_DETAIL = ""
     const val AD_UNIT_FULL_TEST = "ca-app-pub-3940256099942544/1033173712"
     const val AD_UNIT_REWARD_TEST = "ca-app-pub-3940256099942544/5224354917"
-    const val AD_UNIT_REWARD = "ca-app-pub-4146232804662233/7525226837"
+    const val AD_UNIT_REWARD = "ca-app-pub-4394316480067202/7515214437"
 }

@@ -95,7 +95,7 @@ class QuizActivity : BaseActivity(), View.OnClickListener {
     }
 
     fun showAd() {
-        AdRequest.Builder().addTestDevice(Const.TEST_DEVICE_ID).build().let { adRequest ->
+        AdRequest.Builder().build().let { adRequest ->
             adView.run {
                 adListener = object : AdListener() {
                     override fun onAdFailedToLoad(code: Int) {

@@ -124,6 +124,7 @@
                         android:fontFamily="@font/hana_pro"
                         android:gravity="center_vertical"
                         android:text="여기누름 리셋"
+                        android:visibility="gone"
                         android:textColor="@color/greenPointColor"
                         android:textSize="14dp"
                         app:layout_constraintRight_toRightOf="parent"
@@ -218,5 +219,5 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-4146232804662233/4616337941" />
+        app:adUnitId="@string/app_banner1_id" />
 </LinearLayout>
